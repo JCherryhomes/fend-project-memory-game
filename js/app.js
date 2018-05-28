@@ -1,7 +1,8 @@
 /*
  * Create a list that holds all of your cards
  */
-
+const cardList = [];
+var openCards = [];
 
 /*
  * Display the cards on the page
@@ -12,7 +13,9 @@
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    var currentIndex = array.length,
+        temporaryValue,
+        randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -25,6 +28,32 @@ function shuffle(array) {
     return array;
 }
 
+function getSymbol(cardElement) {
+    return cardElement.firstElementChild.classList[1];
+}
+
+function showCard(cardElement) {
+    cardElement
+        .classList
+        .add('open');
+    cardElement
+        .classList
+        .add('show');
+}
+
+function hideCard(cardElement) {
+    cardElement
+        .classList
+        .remove('open');
+    cardElement
+        .classList
+        .remove('show');
+}
+
+function checkForMatch(cardElement) {
+    var symbol = getSymbol(cardElement);
+    return openCards.findIndex(c => getSymbol(c) === symbol) >= 0;
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -36,3 +65,13 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+document
+    .getElementsByClassName('deck')[0]
+    .addEventListener('click', (event) => {
+        if (event.target.className === 'card') {
+            const card = event.target;
+            showCard(card);
+            openCards.push(card);
+        }
+    });
