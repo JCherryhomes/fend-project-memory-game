@@ -1,8 +1,9 @@
 /*
  * Create a list that holds all of your cards
  */
-const cardList = [];
-var openCards = [];
+const deckElement = document.getElementsByClassName('deck')[0];
+console.log(deckElement.hasChildNodes());
+const deck = new Deck(deckElement);
 
 /*
  * Display the cards on the page
@@ -11,49 +12,6 @@ var openCards = [];
  *   - add each card's HTML to the page
  */
 
-// Shuffle function from http://stackoverflow.com/a/2450976
-function shuffle(array) {
-    var currentIndex = array.length,
-        temporaryValue,
-        randomIndex;
-
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-}
-
-function getSymbol(cardElement) {
-    return cardElement.firstElementChild.classList[1];
-}
-
-function showCard(cardElement) {
-    cardElement
-        .classList
-        .add('open');
-    cardElement
-        .classList
-        .add('show');
-}
-
-function hideCard(cardElement) {
-    cardElement
-        .classList
-        .remove('open');
-    cardElement
-        .classList
-        .remove('show');
-}
-
-function checkForMatch(cardElement) {
-    var symbol = getSymbol(cardElement);
-    return openCards.findIndex(c => getSymbol(c) === symbol) >= 0;
-}
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -66,12 +24,21 @@ function checkForMatch(cardElement) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
+
+
 document
     .getElementsByClassName('deck')[0]
     .addEventListener('click', (event) => {
         if (event.target.className === 'card') {
             const card = event.target;
-            showCard(card);
-            openCards.push(card);
+            deck.run(card);
         }
+    });
+
+document
+    .getElementsByClassName('restart')[0]
+    .addEventListener('click', (event) => {
+        console.info('Reset clicked');
+        deck.reset();
+        console.info(deck.cards);
     });

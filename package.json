@@ -1,0 +1,23 @@
+{
+  "name": "fend-project-memory-game",
+  "version": "1.0.0",
+  "description": "Memory game for Udacity front-end course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JCherryhomes/fend-project-memory-game.git"
+  },
+  "author": "Jonathan Cherryhomes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JCherryhomes/fend-project-memory-game/issues"
+  },
+  "homepage": "https://github.com/JCherryhomes/fend-project-memory-game#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "serve-static": "^1.13.2"
+  }
+}
