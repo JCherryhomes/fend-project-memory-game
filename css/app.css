@@ -86,12 +86,15 @@ h1 {
  */
 
 .score-panel {
-    text-align: left;
+    text-align: center;
     width: 345px;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
 }
 
 .score-panel .stars {
+    flex: 25;
     margin: 0;
     padding: 0;
     display: inline-block;
@@ -103,9 +106,18 @@ h1 {
     display: inline-block;
 }
 
+.score-panel .moves {
+    flex: 25;
+}
+
 .score-panel .restart {
-    float: right;
+    flex: 25;
+    text-align: center;
     cursor: pointer;
+}
+
+.score-panel .timer {
+    flex: 25;
 }
 
 .highlight {

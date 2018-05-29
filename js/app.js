@@ -6,8 +6,17 @@ const deckElement = container.getElementsByClassName('deck')[0];
 const resetButton = container.getElementsByClassName('restart')[0];
 const starsElement = container.getElementsByClassName('stars')[0];
 const movesElement = container.getElementsByClassName('moves')[0];
+const timerElement = container.getElementsByClassName('timer')[0];
 
-const deck = new Deck(container, deckElement, resetButton, starsElement, movesElement);
+const stopWatch = new Stopwatch(timerElement);
+const deck = new Deck(
+    container, 
+    deckElement, 
+    resetButton, 
+    starsElement, 
+    movesElement, 
+    stopWatch
+);
 
 /*
  * Display the cards on the page

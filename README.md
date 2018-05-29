@@ -18,3 +18,9 @@ For specific, detailed instructions, look at the project instructions in the [Ud
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
 
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Project Notes and Dependencies
+
+The stopwatch code was borrowed from [https://codepen.io/_Billy_Brown/pen/dbJeh](https://codepen.io/_Billy_Brown/pen/dbJeh).
+
+The project can be run using nodejs by running `node index.js` from the project root. It contains a simplistic express.js http server. You will need to do `npm install` to get the node dependencies. This is optional since the index.html file can just be opened directly in a browser if desired.

@@ -1,7 +1,8 @@
 class Deck {
     
-    constructor(container, deckElement, resetButton, starsElement, movesElement) {
+    constructor(container, deckElement, resetButton, starsElement, movesElement, stopwatch) {
         this.deckElement = deckElement;
+        this.stopwatch = stopwatch;
         this.openCards = [];
         this.cards = [];
         this.attempts = 0;
@@ -63,13 +64,13 @@ class Deck {
     };
 
     finish() {
-        const finishTime = new Date().getTime();
-        const gameTime = (finishTime - this.startTime / 1000;
+        this.stopwatch.stop();
         const message = 'You performed ' + this.attempts + 
-            ' moves in ' + gameTime + ' seconds. You earned ' + 
+            ' moves in ' + this.stopwatch.results() + ' seconds. You earned ' + 
             this.rating + ' star(s)! Play again?';
 
         if (window.confirm(message)) {
+            this.stopwatch.reset();
             this.reset();
         }
     };
@@ -175,7 +176,6 @@ class Deck {
      * Resets and shuffles the cards. Creates and adds the elements to the deck.
      */
     reset() {        
-        this.startTime = new Date().getTime();
         this.openCards = [];
         const shuffledCards = this.shuffle(this.cards);
         
@@ -225,6 +225,7 @@ class Deck {
 
         movesElement.innerHTML = '';
         this.updateRating();
+        this.stopwatch.start();
     };
 
     /**
