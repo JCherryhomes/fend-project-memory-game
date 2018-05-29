@@ -1,15 +1,37 @@
-const Deck = function(deckElement) {
-    var self = this;
-    console.info('Creating Deck');
+class Deck {
+    
+    constructor(container, deckElement, resetButton, starsElement, movesElement) {
+        this.deckElement = deckElement;
+        this.openCards = [];
+        this.cards = [];
+        this.attempts = 0;
+        this.matchCount = 0;
+        this.rating = 3;
 
-    self.openCards = [];
-    self.cards = [];
+        this.addCardClickHandler();
+        this.addResetClickHandler();
+
+        /**
+         * Store the symbols in the order they appear on the page.
+         */
+        for (let index in this.deckElement.children) {
+            let card = this.deckElement.children[index];
+            if (card.firstElementChild) {
+                this.cards.push(this.getSymbol(card));
+            }
+        }
+
+        this.possibleMatchCount = (this.cards.length / 2);
+    
+        // Shuffle the cards so the games starts different every time
+        this.reset();
+    }
 
     /**
      * Get the symbol from the provided card element.
      * @param {li.card} cardElement 
      */
-    self.getSymbol = function(cardElement) {
+    getSymbol(cardElement) {
         return cardElement.firstElementChild.classList[1];
     }
 
@@ -17,39 +39,103 @@ const Deck = function(deckElement) {
      * This method starts the game.
      * @param {li.card} cardElement 
      */
-    self.run = function(cardElement) {
-        self.showCard(cardElement);
+    run(cardElement) {
+        // Attempts should increase 1 for every 2 cards clicked
+        this.attempts += .5;
 
-        if (self.openCardsMatch(cardElement)) {
-            self.hideCards();
-            self.openCards.forEach(card => {
-                card.classList.add('match');
-            });
+        this.showCard(cardElement);
 
-            self.openCards = [];
+        if (this.openCardsMatch()) {
+            this.markMatchedCards();
+            this.matchCount++;
         }
 
-        if (self.openCards.length >= 2) {
-            setTimeout(() => {
-                self.hideCards();
-                self.openCards = [];
-            }, 1500);
+        if (this.openCards.length >= 2) {
+            this.resetUnmatchedCards();
         }
+
+        this.updateRating();
+        this.updateMoves();
+        
+        if (this.possibleMatchCount === this.matchCount) {
+            this.finish();
+        }
+    };
+
+    finish() {
+        const finishTime = new Date().getTime();
+        const gameTime = (finishTime - this.startTime / 1000;
+        const message = 'You performed ' + this.attempts + 
+            ' moves in ' + gameTime + ' seconds. You earned ' + 
+            this.rating + ' star(s)! Play again?';
+
+        if (window.confirm(message)) {
+            this.reset();
+        }
+    };
+
+    updateMoves() {
+        const roundedAttempts = Math.floor(this.attempts);
+
+        if (roundedAttempts > 0) {
+            movesElement.innerHTML = roundedAttempts > 1 ?
+                roundedAttempts + ' Moves' :
+                '1 Move';
+        }
+    };
+
+    updateRating() {
+        const expert = this.possibleMatchCount + 1;
+        const intermediate = this.possibleMatchCount * 2;
+        const attemptCount = Math.floor(this.attempts);
+
+        this.rating = attemptCount <= expert ? 3 : 
+            attemptCount <= intermediate ? 2 : 
+            1;
+
+        for (let index = 0; index < 3; index++) {
+            const star = starsElement.children[index].children[0];
+            star.classList.remove('highlight');
+        }
+
+        for (let index = 0; index < this.rating; index++) {
+            const star = starsElement.children[index].children[0];
+            star.classList.add('highlight');
+        }
+    };
+
+    /**
+     * If there are two open cards, pause before hiding them
+     */
+    resetUnmatchedCards(){
+        setTimeout(() => {
+            this.hideCards();
+            this.openCards = [];
+        }, 500);
+    };
+
+    markMatchedCards() {
+        this.hideCards();
+        this.openCards.forEach(card => {
+            card.classList.add('match');
+        });
+
+        this.openCards = [];
     };
 
     /**
      * Check for two open cards and then check to see if they match.
      */
-    self.openCardsMatch = function() {
-        return self.openCards.length == 2 && self.checkForMatch();
-    }
+    openCardsMatch() {
+        return this.openCards.length == 2 && this.checkForMatch();
+    };
     
     /**
      * Adds the open and show classes to the provided card element.
      * @param {li.card} cardElement 
      */
-    self.showCard = function(cardElement) {
-        if (self.openCards.length < 2) {
+    showCard(cardElement) {
+        if (this.openCards.length < 2) {
             cardElement
                 .classList
                 .add('open');
@@ -57,15 +143,15 @@ const Deck = function(deckElement) {
                 .classList
                 .add('show');
         
-            self.openCards.push(cardElement);
+            this.openCards.push(cardElement);
         }
-    }
+    };
     
     /**
      * Removes the open and show classes from all of the open card elements.
      */
-    self.hideCards = function() {
-        self.openCards.forEach(cardElement => {
+    hideCards() {
+        this.openCards.forEach(cardElement => {
             cardElement
                 .classList
                 .remove('open');
@@ -73,47 +159,47 @@ const Deck = function(deckElement) {
                 .classList
                 .remove('show');
         });
-    }
+    };
     
     /**
      * Checks to see if the symbols match for the currently opened cards.
      */
-    self.checkForMatch = function() {
-        const firstSymbol = self.getSymbol(self.openCards[0]);
-        const secondSymbol = self.getSymbol(self.openCards[1]);
+    checkForMatch() {
+        const firstSymbol = this.getSymbol(this.openCards[0]);
+        const secondSymbol = this.getSymbol(this.openCards[1]);
 
         return firstSymbol === secondSymbol;
-    }
+    };
 
     /**
      * Resets and shuffles the cards. Creates and adds the elements to the deck.
      */
-    self.reset = function() {        
-        self.openCards = [];
-        const shuffledCards = self.shuffle(self.cards);
+    reset() {        
+        this.startTime = new Date().getTime();
+        this.openCards = [];
+        const shuffledCards = this.shuffle(this.cards);
         
-        self.cards = [];
+        this.cards = [];
 
-        while (deckElement.firstChild) {
-            deckElement.removeChild(deckElement.firstChild);
+        while (this.deckElement.firstChild) {
+            this.deckElement.removeChild(this.deckElement.firstChild);
         }
-
-        const container = document.getElementsByClassName('container')[0];
         
-        // Remove the deck element
-        for (var temp in container.children) {
-            const node = container.children[temp];
+        // Remove the current deck element
+        for (let index = 0; index < container.children.length; index++) {
+            const node = container.children[index];
+
             if (node.className === 'deck') {
                 container.removeChild(node);
             }
         }
 
-        // Recreate the deck element
-        deckElement = document.createElement('ul');
-        deckElement.classList.add('deck');
+        // Build a new deck element
+        this.deckElement = document.createElement('ul');
+        this.deckElement.classList.add('deck');
 
         // Build the list of cards and add them to the deck
-        for (var index in shuffledCards) {
+        for (let index in shuffledCards) {
             const symbol = shuffledCards[index];
             const li = document.createElement('li');
             const span = document.createElement('span');
@@ -123,24 +209,30 @@ const Deck = function(deckElement) {
             span.classList.add(symbol);
 
             li.appendChild(span);
-            deckElement.appendChild(li);
-            self.cards.push(symbol);
+            this.deckElement.appendChild(li);
+            this.cards.push(symbol);
         }
 
         // Append the deck to the container. We remove and add the deck to limit reflow.
-        container.appendChild(deckElement);
+        container.appendChild(this.deckElement);
 
         // Add click handler to the newly created deck
-        self.addCardClickHandler();
-        console.log(container);
-    }
+        this.addCardClickHandler();
+
+        this.matchCount = 0;
+        this.attempts = 0;
+        this.rating = 3;
+
+        movesElement.innerHTML = '';
+        this.updateRating();
+    };
 
     /**
      * Shuffles the provided array.
      * Source: Shuffle function from http://stackoverflow.com/a/2450976
      */
-    self.shuffle = function(array) {
-        var currentIndex = array.length,
+    shuffle(array) {
+        let currentIndex = array.length,
             temporaryValue = 0,
             randomIndex = 0;
 
@@ -153,45 +245,26 @@ const Deck = function(deckElement) {
         }
 
         return array;
-    }
-
-    self.addCardClickHandler = function() {
-        document
-            .getElementsByClassName('deck')[0]
-            .addEventListener('click', (event) => {
-                if (event.target.className === 'card') {
-                    const card = event.target;
-                    deck.run(card);
-                }
-            });
-    };
-
-    self.addResetClickHandler = function() {
-        document
-            .getElementsByClassName('restart')[0]
-            .addEventListener('click', (event) => {
-                container.removeChild(deckElement);
-                deck.reset();
-            });
     };
 
     /**
-     * Store the symbols in the order they appear on the page.
+     * Add a click event handler to the deck element.
      */
-    for (var index in deckElement.children) {
-        var card = deckElement.children[index];
-        if (card.firstElementChild) {
-            self.cards.push(self.getSymbol(card));
-        }
-    }
+    addCardClickHandler() {
+        this.deckElement.addEventListener('click', (event) => {
+            if (event.target.className === 'card') {
+                const card = event.target;
+                deck.run(card);
+            }
+        });
+    };
 
     /**
-     * Provides access to the run and reset methods.
+     * Add a click event handler to the reset button.
      */
-    return {
-        run: self.run,
-        reset: self.reset,
-        addResetClickHandler: self.addResetClickHandler,
-        addCardClickHandler: self.addCardClickHandler
+    addResetClickHandler() {
+        resetButton.addEventListener('click', (event) => {
+            deck.reset();
+        });
     };
 };

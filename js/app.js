@@ -2,9 +2,12 @@
  * Create a list that holds all of your cards
  */
 const container = document.getElementsByClassName('container')[0];
-
 const deckElement = container.getElementsByClassName('deck')[0];
-const deck = new Deck(deckElement);
+const resetButton = container.getElementsByClassName('restart')[0];
+const starsElement = container.getElementsByClassName('stars')[0];
+const movesElement = container.getElementsByClassName('moves')[0];
+
+const deck = new Deck(container, deckElement, resetButton, starsElement, movesElement);
 
 /*
  * Display the cards on the page
@@ -24,6 +27,3 @@ const deck = new Deck(deckElement);
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-
-deck.addCardClickHandler();
-deck.addResetClickHandler();

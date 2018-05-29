@@ -107,3 +107,11 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+.highlight {
+    color: #d3c018;
+}
+
+.text-muted {
+    color: #888;
+}
