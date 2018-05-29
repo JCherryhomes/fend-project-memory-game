@@ -1,8 +1,9 @@
 /*
  * Create a list that holds all of your cards
  */
-const deckElement = document.getElementsByClassName('deck')[0];
-console.log(deckElement.hasChildNodes());
+const container = document.getElementsByClassName('container')[0];
+
+const deckElement = container.getElementsByClassName('deck')[0];
 const deck = new Deck(deckElement);
 
 /*
@@ -24,21 +25,5 @@ const deck = new Deck(deckElement);
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-
-
-document
-    .getElementsByClassName('deck')[0]
-    .addEventListener('click', (event) => {
-        if (event.target.className === 'card') {
-            const card = event.target;
-            deck.run(card);
-        }
-    });
-
-document
-    .getElementsByClassName('restart')[0]
-    .addEventListener('click', (event) => {
-        console.info('Reset clicked');
-        deck.reset();
-        console.info(deck.cards);
-    });
+deck.addCardClickHandler();
+deck.addResetClickHandler();
