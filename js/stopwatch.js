@@ -13,6 +13,7 @@ class Stopwatch {
     
     reset() {
         this.times = [ 0, 0, 0 ];
+        this.print();
     }
     
     start() {
@@ -54,22 +55,19 @@ class Stopwatch {
             this.times[1] += 1;
             this.times[2] -= 100;
         }
-        // Minutes are 60 seconds
-        if (this.times[1] >= 60) {
-            this.times[0] += 1;
-            this.times[1] -= 60;
-        }
+        // // Minutes are 60 seconds
+        // if (this.times[1] >= 60) {
+        //     this.times[0] += 1;
+        //     this.times[1] -= 60;
+        // }
     }
     
     print() {
-        this.display.innerText = this.results();
+        this.display.innerText = 'Time: ' + this.results();
     }
     
     results() {
-        return `\
-${pad0(this.times[0], 2)}:\
-${pad0(this.times[1], 2)}:\
-${pad0(Math.floor(this.times[2]), 2)}`;
+        return `${pad0(this.times[1], 2)}`;
     }
 }
 

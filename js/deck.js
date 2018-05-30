@@ -41,6 +41,10 @@ class Deck {
      * @param {li.card} cardElement 
      */
     run(cardElement) {
+        if (!this.stopwatch.running) {
+            this.stopwatch.start();
+        }
+
         // Attempts should increase 1 for every 2 cards clicked
         this.attempts += .5;
 
@@ -69,10 +73,22 @@ class Deck {
             ' moves in ' + this.stopwatch.results() + ' seconds. You earned ' + 
             this.rating + ' star(s)! Play again?';
 
-        if (window.confirm(message)) {
-            this.stopwatch.reset();
-            this.reset();
-        }
+        swal(message, {
+            buttons: {
+                cancel: 'No Thanks',
+                ok: 'Yes Please!'
+            }
+        }).then((value) => {
+            switch(value) {
+                case 'ok':
+                    this.reset();
+                    break;
+                default:
+                    // We do nothing and leave the board as is
+                    // so the user can view their results.
+                    break;
+            }
+        });
     };
 
     updateMoves() {
@@ -176,6 +192,7 @@ class Deck {
      * Resets and shuffles the cards. Creates and adds the elements to the deck.
      */
     reset() {        
+        this.stopwatch.reset();
         this.openCards = [];
         const shuffledCards = this.shuffle(this.cards);
         
@@ -225,7 +242,6 @@ class Deck {
 
         movesElement.innerHTML = '';
         this.updateRating();
-        this.stopwatch.start();
     };
 
     /**
