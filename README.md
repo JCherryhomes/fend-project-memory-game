@@ -1,26 +1,29 @@
 # Memory Game Project
 
-## Table of Contents
+## Project Notes
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+The stopwatch code was modified from [https://codepen.io/_Billy_Brown/pen/dbJeh](https://codepen.io/_Billy_Brown/pen/dbJeh).
 
-## Instructions
+If you wish to use the included express.js server you will need to run `npm install` from the project root.
+Once npm has installed express.js you can run the server using the command: `node index.js`.
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+The project can then be opened at [http://localhost:3000](http://localhost:3000).
 
-To get started, open `js/app.js` and start building out the app's functionality
+This is optional since the index.html file can just be opened directly in a browser if desired.
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+## Project Dependencies
 
-## Contributing
+- [SweetAlert.js](https://sweetalert.js.org)
+- [FontAwesome](https://fontawesome.com/)
+- [Google Fonts (Coda)](https://fonts.google.com/specimen/Coda)
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
+## Playing the Game
 
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+The page will display your current rating, the number of attempts and the time elapsed in seconds above the board.
 
-## Project Notes and Dependencies
+Click on a card to start the game. When two cards are turned over the game will check for a match. If the cards match they will be highlighted and remain turned over. If they do not match then they will be hidden after a short pause.
 
-The stopwatch code was borrowed from [https://codepen.io/_Billy_Brown/pen/dbJeh](https://codepen.io/_Billy_Brown/pen/dbJeh).
+The game is finished once all cards have been matched. You will have the option to start a new game or to leave the board in its current state.
 
-The project can be run using nodejs by running `node index.js` from the project root. It contains a simplistic express.js http server. You will need to do `npm install` to get the node dependencies. This is optional since the index.html file can just be opened directly in a browser if desired.
+You can click the `restart` button at any time to reset the board and start a new game.
+
